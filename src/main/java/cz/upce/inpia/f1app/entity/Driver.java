@@ -15,7 +15,7 @@ public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @OneToMany(mappedBy = "id")
     private Set<Result> driverResults;
@@ -24,6 +24,6 @@ public class Driver {
     private String surename;
     private String code;
     private String nationalilty;
-    private int year;
+    private int born;
 
 }

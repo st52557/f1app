@@ -14,7 +14,7 @@ public class Result {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
     private Driver driver;
