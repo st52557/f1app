@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -14,7 +14,11 @@ import javax.persistence.Id;
 public class Race {
 
     @Id
-    public Long race_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @OneToMany(mappedBy = "id")
+    private Set<Result> raceResults;
 
     private int year;
     private int round;

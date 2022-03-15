@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -14,7 +14,11 @@ import javax.persistence.Id;
 public class Driver {
 
     @Id
-    private Long driver_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(mappedBy = "id")
+    private Set<Result> driverResults;
 
     private String name;
     private String surename;
