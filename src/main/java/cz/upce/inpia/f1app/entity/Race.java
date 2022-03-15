@@ -15,7 +15,7 @@ public class Race {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    public int id;
 
     @OneToMany(mappedBy = "id")
     private Set<Result> raceResults;
