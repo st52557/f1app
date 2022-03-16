@@ -1,5 +1,6 @@
 package cz.upce.inpia.f1app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +16,9 @@ public class Race {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    public Long id;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id")
     private Set<Result> raceResults;
 

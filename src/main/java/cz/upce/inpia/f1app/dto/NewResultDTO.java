@@ -1,26 +1,18 @@
-package cz.upce.inpia.f1app.entity;
+package cz.upce.inpia.f1app.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Result {
+public class NewResultDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
-    @ManyToOne
-    private Driver driver;
-
-    @ManyToOne
-    private Race race;
+    private int driverId;
+    private int raceId;
 
     private int positionFinal;
     private int positionOrder;
