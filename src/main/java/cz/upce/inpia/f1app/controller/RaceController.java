@@ -4,8 +4,10 @@ import cz.upce.inpia.f1app.entity.Driver;
 import cz.upce.inpia.f1app.entity.Race;
 import cz.upce.inpia.f1app.repository.RaceRepository;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,17 +20,21 @@ public class RaceController {
     @Autowired
     private RaceRepository raceRepository;
 
+    @ApiOperation(value = "Method getting all races")
     @GetMapping(value = "/races")
     public List<Race> getAllRaces() {
         return raceRepository.findAll();
     }
 
+    @ApiOperation(value = "Method for getting race by id")
     @GetMapping(value = "/race/{id}")
     public Race getDriver(@PathVariable Long id) {
         return raceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Could not find race with id " + id));
     }
 
+    @ApiOperation(value = "Method for creating new race")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/race")
     public ResponseEntity<?> createNewRace(@RequestBody Race newRace) {
 
@@ -36,6 +42,8 @@ public class RaceController {
         return ResponseEntity.ok("");
     }
 
+    @ApiOperation(value = "Method for deleting race by id")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping(value = "/race/{id}")
     public ResponseEntity<?> DeleteRace(@PathVariable Long id) {
 
@@ -44,6 +52,8 @@ public class RaceController {
 
     }
 
+    @ApiOperation(value = "Method for editing race")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping(value = "/race/{id}")
     public ResponseEntity<?> editRace(@RequestBody Race newRace, @PathVariable Long id) {
 

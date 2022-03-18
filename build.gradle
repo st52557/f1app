@@ -8,11 +8,7 @@ group = 'cz.upce.inpia'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+
 
 repositories {
     mavenCentral()
@@ -33,6 +29,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    implementation "io.jsonwebtoken:jjwt:0.9.1"
+    implementation'org.springframework.boot:spring-boot-starter-mail:2.5.5'
 }
 
 test {
