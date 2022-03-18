@@ -9,10 +9,10 @@
 - JPA Repositories
 - ORM
 - 3 layered architecture
-
+- Spring Security
+- User management
 
 ### TODO
-- Spring Security
 - DTO
 - Controllers
 - Paging
@@ -23,3 +23,4 @@
 - 2x Controller view tests (MockMvc)
 - 1x Integration test?
 - GUI tests
+- Comparing drivers

@@ -7,8 +7,10 @@ import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.RaceRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,17 +27,21 @@ public class ResultController {
     @Autowired
     private RaceRepository raceRepository;
 
+    @ApiOperation(value = "Method for getting all results")
     @GetMapping(value = "/results")
     public List<Result> getAllResults() {
         return resultRepository.findAll();
     }
 
+    @ApiOperation(value = "Method for getting result by id")
     @GetMapping(value = "/result/{id}")
     public Result getResult(@PathVariable Long id) {
         return resultRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Could not find result with id " + id));
     }
 
+    @ApiOperation(value = "Method for creating new result")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/result")
     public ResponseEntity<?> createNewResult(@RequestBody Result newResult) {
 
@@ -43,6 +49,8 @@ public class ResultController {
         return ResponseEntity.ok("");
     }
 
+    @ApiOperation(value = "Method for deleting result by id")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping(value = "/result/{id}")
     public ResponseEntity<?> DeleteResult(@PathVariable Long id) {
 
@@ -51,6 +59,8 @@ public class ResultController {
 
     }
 
+    @ApiOperation(value = "Method for editing result")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping(value = "/result/{id}")
     public ResponseEntity<?> editResult(@RequestBody Result newResult, @PathVariable Long id) {
 
@@ -76,6 +86,7 @@ public class ResultController {
 
     }
 
+    @ApiOperation(value = "Method for getting all results by driver id")
     @GetMapping(value = "/results/{id}")
     public List<Result> getAllResultsByDriverId(@PathVariable Long id) {
         return resultRepository.findAllByDriverId(id);
