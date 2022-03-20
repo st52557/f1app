@@ -78,14 +78,15 @@ public class UserController {
     }
     @ApiOperation(value = "This method is used to register new user.")
     @PostMapping(value = "/user/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) throws Exception {
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
 
         if(userRepository.findByName(userDTO.getName()) != null){
-            throw new Exception("username already exists!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("username already exists!");
         }
 
         if(userRepository.findByEmail(userDTO.getEmail()) != null){
-            throw new Exception("Email already exists!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists!");
+
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -98,7 +99,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(user);
     }
 
     @ApiOperation(value = "This method is used to change password.")
