@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -29,7 +30,7 @@ public class Result {
     private int laps;
     private int milisTime;
     private int fastestLap;
-    private int fastestLapTime;
-    private int fastestTimeSpeed;
+    private Date fastestLapTime;
+    private Double fastestTimeSpeed;
 
 }

@@ -2,10 +2,7 @@ package cz.upce.inpia.f1app.controller;
 
 
 import cz.upce.inpia.f1app.config.JwtTokenUtil;
-import cz.upce.inpia.f1app.dto.ChangePassDTO;
-import cz.upce.inpia.f1app.dto.ResetPassDTO;
-import cz.upce.inpia.f1app.dto.UserDTO;
-import cz.upce.inpia.f1app.dto.UserLoginDTO;
+import cz.upce.inpia.f1app.dto.*;
 import cz.upce.inpia.f1app.entity.User;
 import cz.upce.inpia.f1app.jwt.JwtResponse;
 import cz.upce.inpia.f1app.repository.UserRepository;
@@ -54,14 +51,21 @@ public class UserController {
 
     @ApiOperation(value = "This method is used to login user.")
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserLoginDTO UserLoginDTO) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserLoginDTO userLoginDTO) throws Exception {
 
-        authenticate(UserLoginDTO.getName(), UserLoginDTO.getPassword());
-        final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(UserLoginDTO.getName());
+        authenticate(userLoginDTO.getName(), userLoginDTO.getPassword());
+        final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(userLoginDTO.getName());
 
         String token = jwtTokenUtil.generateToken(userDetails);
         token = "Bearer "+token;
-        return ResponseEntity.ok(new JwtResponse(token));
+
+        boolean isAdmin = userRepository.isAdmin(userRepository.findByName(userLoginDTO.getName()).getId());
+
+        UserLoginRetDTO userLoginRetDTO = new UserLoginRetDTO();
+        userLoginRetDTO.setToken(token);
+        userLoginRetDTO.setAdmin(isAdmin);
+
+        return ResponseEntity.ok(userLoginRetDTO);
     }
 
     private void authenticate(String username, String password) throws Exception {
