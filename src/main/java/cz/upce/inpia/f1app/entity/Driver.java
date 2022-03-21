@@ -25,6 +25,7 @@ public class Driver {
     private String name;
     private String surename;
     private String code;
+    private String ref_name;
     private String nationalilty;
     private int born;
 

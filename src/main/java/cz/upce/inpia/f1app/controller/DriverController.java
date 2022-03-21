@@ -1,6 +1,9 @@
 package cz.upce.inpia.f1app.controller;
 
 import cz.upce.inpia.f1app.dto.CompareDriversDTO;
+import cz.upce.inpia.f1app.dto.inner.Overtakes;
+import cz.upce.inpia.f1app.dto.inner.PointsScored;
+import cz.upce.inpia.f1app.dto.inner.RacesWon;
 import cz.upce.inpia.f1app.entity.Driver;
 import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
@@ -85,15 +88,25 @@ public class DriverController {
         Driver firstDriver = driverRepository.findById(firstDriverId).orElse(null);
         Driver secondDriver = driverRepository.findById(secondDriverId).orElse(null);
 
-        CompareDriversDTO.PointsScored pointsScored = compareDriversDTO.new PointsScored();
-
         if(firstDriver == null || secondDriver == null){
             throw new NullPointerException("Driver to compare not found");
         }
 
+        PointsScored pointsScored = new PointsScored();
         pointsScored.setFirstDriver(resultRepository.countAllPointsByDriverId(firstDriver.getId()));
-        pointsScored.setFirstDriver(resultRepository.countAllPointsByDriverId(secondDriver.getId()));
+        pointsScored.setSecondDriver(resultRepository.countAllPointsByDriverId(secondDriver.getId()));
 
+        RacesWon racesWon = new RacesWon();
+        racesWon.setFirstDriver(resultRepository.countAllWinsByDriverId(firstDriver.getId()));
+        racesWon.setSecondDriver(resultRepository.countAllWinsByDriverId(secondDriver.getId()));
+
+        Overtakes overtakes = new Overtakes();
+        overtakes.setFirstDriver(resultRepository.countAllOvertakesByDriverId(firstDriver.getId()));
+        overtakes.setSecondDriver(resultRepository.countAllOvertakesByDriverId(secondDriver.getId()));
+
+        compareDriversDTO.setPointsScored(pointsScored);
+        compareDriversDTO.setRacesWon(racesWon);
+        compareDriversDTO.setOvertakes(overtakes);
         return compareDriversDTO;
 
     }
