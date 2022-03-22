@@ -45,8 +45,8 @@ public class ResultController {
     @PostMapping(value = "/result")
     public ResponseEntity<?> createNewResult(@RequestBody Result newResult) {
 
-        resultRepository.save(newResult);
-        return ResponseEntity.ok("");
+        Result result = resultRepository.save(newResult);
+        return ResponseEntity.ok(result);
     }
 
     @ApiOperation(value = "Method for deleting result by id")

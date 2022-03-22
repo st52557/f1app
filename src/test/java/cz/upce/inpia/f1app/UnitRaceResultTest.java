@@ -10,17 +10,16 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-public class RaceResultTest {
+@ActiveProfiles("test")
+public class UnitRaceResultTest {
 
     @Autowired
     private DriverRepository driverRepository;
@@ -37,6 +36,7 @@ public class RaceResultTest {
         Driver driver = new Driver();
         driver.setName("Lando");
         driver.setCode("LAN");
+        driver.setBorn(1997);
         driverRepository.save(driver);
 
         Race race = new Race();
@@ -62,5 +62,6 @@ public class RaceResultTest {
 
 
     }
+
 
 }
