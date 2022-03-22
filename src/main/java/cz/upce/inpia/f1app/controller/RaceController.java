@@ -27,6 +27,7 @@ public class RaceController {
     }
 
     @ApiOperation(value = "Method for getting race by id")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/race/{id}")
     public Race getDriver(@PathVariable Long id) {
         return raceRepository.findById(id)

@@ -34,6 +34,7 @@ public class ResultController {
     }
 
     @ApiOperation(value = "Method for getting result by id")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/result/{id}")
     public Result getResult(@PathVariable Long id) {
         return resultRepository.findById(id)

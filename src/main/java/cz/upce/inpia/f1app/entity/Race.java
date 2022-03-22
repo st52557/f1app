@@ -22,7 +22,7 @@ public class Race {
     @OneToMany(mappedBy = "id")
     private Set<Result> raceResults;
 
-    private int year;
-    private int round;
+    private Integer year;
+    private Integer round;
     private String circuit;
 }

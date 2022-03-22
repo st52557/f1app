@@ -35,6 +35,7 @@ public class DriverController {
     }
 
     @ApiOperation(value = "Method for getting driver by id")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/driver/{id}")
     public Driver getDriver(@PathVariable Long id) {
         return driverRepository.findById(id)
