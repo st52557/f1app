@@ -38,8 +38,8 @@ public class RaceController {
     @PostMapping(value = "/race")
     public ResponseEntity<?> createNewRace(@RequestBody Race newRace) {
 
-        raceRepository.save(newRace);
-        return ResponseEntity.ok("");
+        Race race = raceRepository.save(newRace);
+        return ResponseEntity.ok(race);
     }
 
     @ApiOperation(value = "Method for deleting race by id")
