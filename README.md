@@ -1,6 +1,6 @@
 # SeMF1
 ## SpringBoot backend for f1 app.
-
+http://localhost:8080/swagger-ui.html
 
 ### DONE
 - Using SpringBoot
