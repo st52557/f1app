@@ -1,10 +1,12 @@
 package cz.upce.inpia.f1app.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
@@ -22,4 +24,5 @@ public class User {
     private String name;
     private String recoveryCode = "";
     private Date recoveryCodeExp;
+    private boolean admin = false;
 }
