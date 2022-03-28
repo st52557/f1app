@@ -23,14 +23,14 @@ public class Result {
     @ManyToOne
     private Race race;
 
-    private int positionFinal;
-    private int positionOrder;
-    private int positionStart;
+    private Integer positionFinal;
+    private Integer positionOrder;
+    private Integer positionStart;
     private Double points;
-    private int laps;
-    private int milisTime;
-    private int fastestLap;
-    private Date fastestLapTime;
+    private Integer laps;
+    private Integer milisTime;
+    private Integer fastestLap;
+    private String fastestLapTime;
     private Double fastestTimeSpeed;
 
 }

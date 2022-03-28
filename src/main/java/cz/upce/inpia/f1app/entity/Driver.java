@@ -33,6 +33,6 @@ public class Driver {
     private String nationalilty;
     @Min(1000)
     @Max(3000)
-    private int born;
+    private Integer born;
 
 }
