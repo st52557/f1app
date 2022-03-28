@@ -25,5 +25,5 @@ public class User {
     private String name;
     private String recoveryCode = "";
     private Date recoveryCodeExp;
-    private boolean admin = false;
+    private Integer admin = 0;
 }

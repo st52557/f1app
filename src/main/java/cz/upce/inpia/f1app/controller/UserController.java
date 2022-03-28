@@ -60,11 +60,11 @@ public class UserController {
         String token = jwtTokenUtil.generateToken(userDetails);
         token = "Bearer "+token;
 
-        boolean isAdmin = userRepository.isAdmin(userRepository.findByName(userLoginDTO.getName()).getId());
+        Integer isAdmin = userRepository.isAdmin(userRepository.findByName(userLoginDTO.getName()).getId());
 
         UserLoginRetDTO userLoginRetDTO = new UserLoginRetDTO();
         userLoginRetDTO.setToken(token);
-        userLoginRetDTO.setAdmin(isAdmin);
+        userLoginRetDTO.setIsAdmin(isAdmin);
 
         return ResponseEntity.ok(userLoginRetDTO);
     }

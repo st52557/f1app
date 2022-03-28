@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     public User findByEmail(String email);
 
-    @Query(value = "SELECT admin FROM user WHERE user.id = ?1", nativeQuery = true)
-    public boolean isAdmin(Long id);
+    @Query(value = "SELECT admin FROM \"user\" WHERE id = ?1", nativeQuery = true)
+    public Integer isAdmin(Long id);
 
 }
