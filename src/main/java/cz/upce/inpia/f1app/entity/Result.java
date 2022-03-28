@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
+@Table(name="result", schema = "public")
 @Entity
 @Getter
 @Setter

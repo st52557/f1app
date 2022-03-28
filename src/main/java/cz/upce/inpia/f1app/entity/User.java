@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
+@Table(name="user", schema = "public")
 @Entity
 @Getter
 @Setter
