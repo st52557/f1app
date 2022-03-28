@@ -34,6 +34,7 @@ public class ResultController {
     }
 
     @ApiOperation(value = "Method for getting result by id")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/result/{id}")
     public Result getResult(@PathVariable Long id) {
         return resultRepository.findById(id)
@@ -45,8 +46,8 @@ public class ResultController {
     @PostMapping(value = "/result")
     public ResponseEntity<?> createNewResult(@RequestBody Result newResult) {
 
-        resultRepository.save(newResult);
-        return ResponseEntity.ok("");
+        Result result = resultRepository.save(newResult);
+        return ResponseEntity.ok(result);
     }
 
     @ApiOperation(value = "Method for deleting result by id")

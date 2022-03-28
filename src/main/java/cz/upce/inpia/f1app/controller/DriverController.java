@@ -12,8 +12,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController(value = "/driver")
@@ -33,6 +35,7 @@ public class DriverController {
     }
 
     @ApiOperation(value = "Method for getting driver by id")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/driver/{id}")
     public Driver getDriver(@PathVariable Long id) {
         return driverRepository.findById(id)
@@ -42,10 +45,11 @@ public class DriverController {
     @ApiOperation(value = "Method for creating new driver")
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/driver")
-    public ResponseEntity<?> createNewDriver(@RequestBody Driver newDriver) {
+    public ResponseEntity<?> createNewDriver(@Valid @RequestBody Driver newDriver) {
 
-        driverRepository.save(newDriver);
-        return ResponseEntity.ok("");
+        Driver driver = driverRepository.save(newDriver);
+
+        return ResponseEntity.ok(driver);
     }
 
     @ApiOperation(value = "Method for deleting driver")

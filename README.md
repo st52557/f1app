@@ -4,23 +4,25 @@ http://localhost:8080/swagger-ui.html
 
 ### DONE
 - Using SpringBoot
-- Basic entities(3)
+- Basic entities
 - Database connection (mysql)
 - JPA Repositories
 - ORM
 - 3 layered architecture
 - Spring Security
 - User management
-
-### TODO
+- 2x Unit test
+- 2x Controller view tests (MockMvc)
 - DTO
 - Controllers
-- Paging
-- Sorting
-- Searching (mby on frontend?)
-- Heroku :(
-- 2x Unit test for logic
-- 2x Controller view tests (MockMvc)
+
+### TODO
+- Paging (frontend?)
+- Sorting (frontend?)
+- Searching (frontend?)
+- Heroku
 - 1x Integration test?
 - GUI tests
 - Comparing drivers
+- Last / most searched (new table?)
+- Trends / Forecasting

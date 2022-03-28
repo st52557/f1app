@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,7 +83,7 @@ public class UserController {
     }
     @ApiOperation(value = "This method is used to register new user.")
     @PostMapping(value = "/user/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO) {
 
         if(userRepository.findByName(userDTO.getName()) != null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("username already exists!");

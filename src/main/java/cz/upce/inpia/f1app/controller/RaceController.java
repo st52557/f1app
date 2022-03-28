@@ -27,6 +27,7 @@ public class RaceController {
     }
 
     @ApiOperation(value = "Method for getting race by id")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/race/{id}")
     public Race getDriver(@PathVariable Long id) {
         return raceRepository.findById(id)
@@ -38,8 +39,8 @@ public class RaceController {
     @PostMapping(value = "/race")
     public ResponseEntity<?> createNewRace(@RequestBody Race newRace) {
 
-        raceRepository.save(newRace);
-        return ResponseEntity.ok("");
+        Race race = raceRepository.save(newRace);
+        return ResponseEntity.ok(race);
     }
 
     @ApiOperation(value = "Method for deleting race by id")

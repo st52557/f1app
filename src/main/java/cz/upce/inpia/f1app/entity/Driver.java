@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import javax.validation.constraints.Max;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
@@ -24,9 +27,12 @@ public class Driver {
 
     private String name;
     private String surename;
+    @Size(min = 3,max = 3)
     private String code;
     private String ref_name;
     private String nationalilty;
-    private int born;
+    @Min(1000)
+    @Max(3000)
+    private Integer born;
 
 }
