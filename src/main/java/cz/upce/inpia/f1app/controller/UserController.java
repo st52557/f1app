@@ -64,7 +64,7 @@ public class UserController {
 
         UserLoginRetDTO userLoginRetDTO = new UserLoginRetDTO();
         userLoginRetDTO.setToken(token);
-        userLoginRetDTO.setIsAdmin(isAdmin);
+        userLoginRetDTO.setAdmin(isAdmin == 1);
 
         return ResponseEntity.ok(userLoginRetDTO);
     }

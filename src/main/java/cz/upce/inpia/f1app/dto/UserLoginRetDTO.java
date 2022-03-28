@@ -10,6 +10,6 @@ import lombok.Setter;
 public class UserLoginRetDTO {
 
     private String token;
-    private Integer isAdmin;
+    private boolean isAdmin;
 
 }
