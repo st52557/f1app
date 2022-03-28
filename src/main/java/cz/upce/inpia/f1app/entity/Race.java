@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Set;
 
+@Table(name="race", schema = "public")
 @Entity
 @Getter
 @Setter
