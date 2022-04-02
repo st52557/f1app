@@ -9,11 +9,15 @@ import cz.upce.inpia.f1app.repository.ResultRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController(value = "/result")
 @Api(tags = "results")
@@ -29,9 +33,18 @@ public class ResultController {
 
     @ApiOperation(value = "Method for getting all results")
     @GetMapping(value = "/results")
-    public List<Result> getAllResults() {
-        return resultRepository.findAll();
+    public List<Result> getAllResults(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String sort) {
+
+
+        if(!sort.equals("ASC") && !sort.equals("DESC")){
+            Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page, size));
+            return pageableResult.getContent();
+        }
+
+        Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page,size, Sort.Direction.valueOf(sort),"points"));
+        return pageableResult.getContent();
     }
+
 
     @ApiOperation(value = "Method for getting result by id")
     @PreAuthorize("isAuthenticated()")

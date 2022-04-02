@@ -10,6 +10,7 @@ import cz.upce.inpia.f1app.repository.ResultRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @RestController(value = "/driver")
 @Api(tags = "drivers")
@@ -30,8 +32,12 @@ public class DriverController {
 
     @ApiOperation(value = "Method for getting all drivers")
     @GetMapping(value = "/drivers")
-    public List<Driver> getAllDrivers() {
-        return driverRepository.findAll();
+    public List<Driver> getAllDrivers(@RequestParam(required = false) String sort) {
+
+        if(!sort.equals("ASC") && !sort.equals("DESC")){
+            return driverRepository.findAll();
+        }
+        return driverRepository.findAll(Sort.by(Sort.Direction.valueOf(sort),"name"));
     }
 
     @ApiOperation(value = "Method for getting driver by id")
@@ -61,6 +67,7 @@ public class DriverController {
         return ResponseEntity.ok("");
 
     }
+
     @ApiOperation(value = "Method for editing driver")
     @PreAuthorize("isAuthenticated()")
     @PutMapping(value = "/driver/{id}")
@@ -92,7 +99,7 @@ public class DriverController {
         Driver firstDriver = driverRepository.findById(firstDriverId).orElse(null);
         Driver secondDriver = driverRepository.findById(secondDriverId).orElse(null);
 
-        if(firstDriver == null || secondDriver == null){
+        if (firstDriver == null || secondDriver == null) {
             throw new NullPointerException("Driver to compare not found");
         }
 
