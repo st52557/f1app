@@ -1,7 +1,6 @@
 package cz.upce.inpia.f1app.controller;
 
-import cz.upce.inpia.f1app.dto.NewResultDTO;
-import cz.upce.inpia.f1app.entity.Race;
+import cz.upce.inpia.f1app.dto.DriverCumulativeSumPoints;
 import cz.upce.inpia.f1app.entity.Result;
 import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.RaceRepository;
@@ -16,8 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Tuple;
+import java.math.BigInteger;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController(value = "/result")
 @Api(tags = "results")
@@ -104,6 +105,25 @@ public class ResultController {
     @GetMapping(value = "/results/{id}")
     public List<Result> getAllResultsByDriverId(@PathVariable Long id) {
         return resultRepository.findAllByDriverId(id);
+    }
+
+    @ApiOperation(value = "Method for getting cumulative sum of points by driver id")
+    @GetMapping(value = "/result/sum/{id}")
+    public List<DriverCumulativeSumPoints> getCumulativePointsByDriverId(@PathVariable Long id) {
+
+        List<Tuple> cumPoints = resultRepository.getCumulativePointsByDriverId(id);
+
+        List<DriverCumulativeSumPoints> cumPointsDto = cumPoints.stream()
+                .map(t -> new DriverCumulativeSumPoints(
+                        t.get(0, Integer.class),
+                        t.get(1, Integer.class),
+                        t.get(2, Double.class),
+                        t.get(3, Double.class)
+                ))
+                .collect(Collectors.toList());
+
+        return cumPointsDto;
+
     }
 
 }
