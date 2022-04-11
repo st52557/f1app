@@ -2,6 +2,8 @@
 ## SpringBoot backend for f1 app.
 http://localhost:8080/swagger-ui.html
 
+Heroku: https://semf1.herokuapp.com/
+
 ### DONE
 - Using SpringBoot
 - Basic entities
