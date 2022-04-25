@@ -3,6 +3,7 @@
 http://localhost:8080/swagger-ui.html
 
 Heroku: https://semf1.herokuapp.com/
+https://semf1.herokuapp.com/swagger-ui.html#
 
 ### DONE
 - Using SpringBoot
@@ -17,12 +18,12 @@ Heroku: https://semf1.herokuapp.com/
 - 2x Controller view tests (MockMvc)
 - DTO
 - Controllers
+- Heroku
+- Paging (tried)
+- Sorting (tried)
+- Searching (tried)
 
 ### TODO
-- Paging (frontend?)
-- Sorting (frontend?)
-- Searching (frontend?)
-- Heroku
 - 1x Integration test?
 - GUI tests
 - Comparing drivers
