@@ -16,7 +16,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
     @Query(value = "SELECT SUM(points) FROM Result as re WHERE re.driver_id = ?1", nativeQuery = true)
     public Double countAllPointsByDriverId(Long id);
 
-    @Query(value = "SELECT COUNT(*) FROM Result as re WHERE re.driver_id = ?1 AND re.position_final LIKE 1", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM Result as re WHERE re.driver_id = ?1 AND re.position_final = 1", nativeQuery = true)
     public int countAllWinsByDriverId(Long id);
 
     @Query(value = "SELECT SUM(position_start-position_final) AS DIFF FROM Result as re WHERE re.driver_id = ?1", nativeQuery = true)
