@@ -2,6 +2,9 @@
 ## SpringBoot backend for f1 app.
 http://localhost:8080/swagger-ui.html
 
+https://semf1.herokuapp.com </br>
+https://semf1.herokuapp.com/swagger-ui.html#
+
 ### DONE
 - Using SpringBoot
 - Basic entities
@@ -15,12 +18,12 @@ http://localhost:8080/swagger-ui.html
 - 2x Controller view tests (MockMvc)
 - DTO
 - Controllers
+- Heroku
+- Paging (tried)
+- Sorting (tried)
+- Searching (tried)
 
 ### TODO
-- Paging (frontend?)
-- Sorting (frontend?)
-- Searching (frontend?)
-- Heroku
 - 1x Integration test?
 - GUI tests
 - Comparing drivers
