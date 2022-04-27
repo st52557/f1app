@@ -38,15 +38,17 @@ public class ResultController {
 
     @ApiOperation(value = "Method for getting all results")
     @GetMapping(value = "/results")
-    public List<Result> getAllResults(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String sort) {
+    public List<Result> getAllResults(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false, defaultValue = "ASC") String sort) {
 
-
-        if(!sort.equals("ASC") && !sort.equals("DESC")){
-            Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page, size));
-            return pageableResult.getContent();
+        if (!sort.equals("ASC") && !sort.equals("DESC")) {
+            return resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC, "points")).getContent();
         }
 
-        Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page,size, Sort.Direction.valueOf(sort),"points"));
+        if (page == null || size == null) {
+            return resultRepository.findAll(Sort.by(Sort.Direction.valueOf(sort), "points"));
+        }
+
+        Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.valueOf(sort), "points"));
         return pageableResult.getContent();
     }
 
