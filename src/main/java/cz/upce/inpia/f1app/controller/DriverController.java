@@ -32,12 +32,12 @@ public class DriverController {
 
     @ApiOperation(value = "Method for getting all drivers")
     @GetMapping(value = "/drivers")
-    public List<Driver> getAllDrivers(@RequestParam(required = false) String sort) {
+    public List<Driver> getAllDrivers(@RequestParam(required = false, defaultValue = "ASC") String sort) {
 
-        if(!sort.equals("ASC") && !sort.equals("DESC")){
+        if (!sort.equals("ASC") && !sort.equals("DESC")) {
             return driverRepository.findAll();
         }
-        return driverRepository.findAll(Sort.by(Sort.Direction.valueOf(sort),"name"));
+        return driverRepository.findAll(Sort.by(Sort.Direction.valueOf(sort), "name"));
     }
 
     @ApiOperation(value = "Method for getting driver by id")
