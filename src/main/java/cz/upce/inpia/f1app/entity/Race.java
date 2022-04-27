@@ -20,7 +20,7 @@ public class Race {
     public Long id;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
     private Set<Result> raceResults;
 
     private Integer year;

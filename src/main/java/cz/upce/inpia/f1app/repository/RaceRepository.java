@@ -8,5 +8,6 @@ public interface RaceRepository extends JpaRepository<Race, Long> {
 
     public void removeRaceById(int id);
 
+    public Race findRaceById(Long id);
 
 }

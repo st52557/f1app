@@ -9,10 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NewResultDTO {
 
-    private int id;
+    private Long id;
 
-    private int driverId;
-    private int raceId;
+    private Long driverId;
+    private Long raceId;
 
     private int positionFinal;
     private int positionOrder;
@@ -22,6 +22,6 @@ public class NewResultDTO {
     private int milisTime;
     private int fastestLap;
     private int fastestLapTime;
-    private int fastestTimeSpeed;
+    private Double fastestTimeSpeed;
 
 }

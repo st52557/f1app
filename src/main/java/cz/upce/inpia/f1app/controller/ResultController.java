@@ -1,6 +1,9 @@
 package cz.upce.inpia.f1app.controller;
 
 import cz.upce.inpia.f1app.dto.DriverCumulativeSumPoints;
+import cz.upce.inpia.f1app.dto.NewResultDTO;
+import cz.upce.inpia.f1app.entity.Driver;
+import cz.upce.inpia.f1app.entity.Race;
 import cz.upce.inpia.f1app.entity.Result;
 import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.RaceRepository;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.Tuple;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController(value = "/result")
@@ -58,9 +62,24 @@ public class ResultController {
     @ApiOperation(value = "Method for creating new result")
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/result")
-    public ResponseEntity<?> createNewResult(@RequestBody Result newResult) {
+    public ResponseEntity<?> createNewResult(@RequestBody NewResultDTO newResultDTO) {
 
-        Result result = resultRepository.save(newResult);
+        Result resultToSave = new Result();
+
+        Race race = raceRepository.findRaceById(newResultDTO.getRaceId());
+        Driver driver = driverRepository.findDriverById(newResultDTO.getDriverId());
+
+        resultToSave.setRace(race);
+        resultToSave.setDriver(driver);
+        resultToSave.setPoints(newResultDTO.getPoints());
+        resultToSave.setFastestLap(newResultDTO.getFastestLap());
+        resultToSave.setMilisTime(newResultDTO.getMilisTime());
+        resultToSave.setFastestTimeSpeed(newResultDTO.getFastestTimeSpeed());
+        resultToSave.setPositionFinal(newResultDTO.getPositionFinal());
+        resultToSave.setPositionStart(newResultDTO.getPositionStart());
+
+
+        Result result = resultRepository.save(resultToSave);
         return ResponseEntity.ok(result);
     }
 

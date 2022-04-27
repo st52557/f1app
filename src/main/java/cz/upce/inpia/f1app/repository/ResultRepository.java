@@ -19,7 +19,7 @@ public interface ResultRepository extends JpaRepository<Result, Long>, JpaSpecif
     @Query("SELECT SUM(re.points) FROM Result re WHERE re.driver.id = ?1")
     public Double countAllPointsByDriverId(Long id);
 
-    @Query(value = "SELECT COUNT(*) wins FROM Result as re WHERE re.driver_id = ?1 AND re.position_final = 1", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM Result as re WHERE re.driver_id = ?1 AND re.position_final = 1", nativeQuery = true)
     public int countAllWinsByDriverId(Long id);
 
     @Query("SELECT SUM(re.positionStart-re.positionFinal) AS DIFF FROM Result re WHERE re.driver.id = ?1")

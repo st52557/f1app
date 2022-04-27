@@ -1,10 +1,12 @@
 package cz.upce.inpia.f1app.repository;
 
 import cz.upce.inpia.f1app.entity.Driver;
+import cz.upce.inpia.f1app.entity.Race;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DriverRepository extends JpaRepository<Driver, Long> {
 
+    public Driver findDriverById(Long id);
 
 
 }
