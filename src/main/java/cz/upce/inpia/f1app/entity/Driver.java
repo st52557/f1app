@@ -23,7 +23,7 @@ public class Driver {
     private Long id;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
     private Set<Result> driverResults;
 
     private String name;

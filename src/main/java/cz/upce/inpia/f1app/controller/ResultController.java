@@ -1,6 +1,8 @@
 package cz.upce.inpia.f1app.controller;
 
+import cz.upce.inpia.f1app.dto.DriverCumulativeSumPoints;
 import cz.upce.inpia.f1app.dto.NewResultDTO;
+import cz.upce.inpia.f1app.entity.Driver;
 import cz.upce.inpia.f1app.entity.Race;
 import cz.upce.inpia.f1app.entity.Result;
 import cz.upce.inpia.f1app.repository.DriverRepository;
@@ -9,11 +11,18 @@ import cz.upce.inpia.f1app.repository.ResultRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Tuple;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController(value = "/result")
 @Api(tags = "results")
@@ -29,9 +38,18 @@ public class ResultController {
 
     @ApiOperation(value = "Method for getting all results")
     @GetMapping(value = "/results")
-    public List<Result> getAllResults() {
-        return resultRepository.findAll();
+    public List<Result> getAllResults(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String sort) {
+
+
+        if(!sort.equals("ASC") && !sort.equals("DESC")){
+            Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page, size));
+            return pageableResult.getContent();
+        }
+
+        Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page,size, Sort.Direction.valueOf(sort),"points"));
+        return pageableResult.getContent();
     }
+
 
     @ApiOperation(value = "Method for getting result by id")
     @PreAuthorize("isAuthenticated()")
@@ -44,9 +62,24 @@ public class ResultController {
     @ApiOperation(value = "Method for creating new result")
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/result")
-    public ResponseEntity<?> createNewResult(@RequestBody Result newResult) {
+    public ResponseEntity<?> createNewResult(@RequestBody NewResultDTO newResultDTO) {
 
-        Result result = resultRepository.save(newResult);
+        Result resultToSave = new Result();
+
+        Race race = raceRepository.findRaceById(newResultDTO.getRaceId());
+        Driver driver = driverRepository.findDriverById(newResultDTO.getDriverId());
+
+        resultToSave.setRace(race);
+        resultToSave.setDriver(driver);
+        resultToSave.setPoints(newResultDTO.getPoints());
+        resultToSave.setFastestLap(newResultDTO.getFastestLap());
+        resultToSave.setMilisTime(newResultDTO.getMilisTime());
+        resultToSave.setFastestTimeSpeed(newResultDTO.getFastestTimeSpeed());
+        resultToSave.setPositionFinal(newResultDTO.getPositionFinal());
+        resultToSave.setPositionStart(newResultDTO.getPositionStart());
+
+
+        Result result = resultRepository.save(resultToSave);
         return ResponseEntity.ok(result);
     }
 
@@ -91,6 +124,25 @@ public class ResultController {
     @GetMapping(value = "/results/{id}")
     public List<Result> getAllResultsByDriverId(@PathVariable Long id) {
         return resultRepository.findAllByDriverId(id);
+    }
+
+    @ApiOperation(value = "Method for getting cumulative sum of points by driver id")
+    @GetMapping(value = "/result/sum/{id}")
+    public List<DriverCumulativeSumPoints> getCumulativePointsByDriverId(@PathVariable Long id) {
+
+        List<Tuple> cumPoints = resultRepository.getCumulativePointsByDriverId(id);
+
+        List<DriverCumulativeSumPoints> cumPointsDto = cumPoints.stream()
+                .map(t -> new DriverCumulativeSumPoints(
+                        t.get(0, Integer.class),
+                        t.get(1, Integer.class),
+                        t.get(2, Double.class),
+                        t.get(3, Double.class)
+                ))
+                .collect(Collectors.toList());
+
+        return cumPointsDto;
+
     }
 
 }
