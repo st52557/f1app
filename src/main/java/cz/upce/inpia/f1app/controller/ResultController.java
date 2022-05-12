@@ -8,6 +8,7 @@ import cz.upce.inpia.f1app.entity.Result;
 import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.RaceRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
+import cz.upce.inpia.f1app.services.ResultService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Tuple;
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController(value = "/result")
 @Api(tags = "results")
@@ -36,20 +33,18 @@ public class ResultController {
     @Autowired
     private RaceRepository raceRepository;
 
+    private ResultService resultService;
+
     @ApiOperation(value = "Method for getting all results")
     @GetMapping(value = "/results")
-    public List<Result> getAllResults(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false, defaultValue = "ASC") String sort) {
+    public Page<Result> getAllResults(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "20") Integer size, @RequestParam(required = false, defaultValue = "ASC") String sort) {
 
         if (!sort.equals("ASC") && !sort.equals("DESC")) {
-            return resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC, "points")).getContent();
-        }
-
-        if (page == null || size == null) {
-            return resultRepository.findAll(Sort.by(Sort.Direction.valueOf(sort), "points"));
+            return resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC, "points"));
         }
 
         Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.valueOf(sort), "points"));
-        return pageableResult.getContent();
+        return pageableResult;
     }
 
 
@@ -66,29 +61,14 @@ public class ResultController {
     @PostMapping(value = "/result")
     public ResponseEntity<?> createNewResult(@RequestBody NewResultDTO newResultDTO) {
 
-        Result resultToSave = new Result();
-
-        Race race = raceRepository.findRaceById(newResultDTO.getRaceId());
-        Driver driver = driverRepository.findDriverById(newResultDTO.getDriverId());
-
-        resultToSave.setRace(race);
-        resultToSave.setDriver(driver);
-        resultToSave.setPoints(newResultDTO.getPoints());
-        resultToSave.setFastestLap(newResultDTO.getFastestLap());
-        resultToSave.setMilisTime(newResultDTO.getMilisTime());
-        resultToSave.setFastestTimeSpeed(newResultDTO.getFastestTimeSpeed());
-        resultToSave.setPositionFinal(newResultDTO.getPositionFinal());
-        resultToSave.setPositionStart(newResultDTO.getPositionStart());
-
-
-        Result result = resultRepository.save(resultToSave);
-        return ResponseEntity.ok(result);
+        return resultService.getResultResponseEntity(newResultDTO);
     }
+    
 
     @ApiOperation(value = "Method for deleting result by id")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping(value = "/result/{id}")
-    public ResponseEntity<?> DeleteResult(@PathVariable Long id) {
+    public ResponseEntity<?> deleteResult(@PathVariable Long id) {
 
         resultRepository.deleteById(id);
         return ResponseEntity.ok("");
@@ -100,27 +80,10 @@ public class ResultController {
     @PutMapping(value = "/result/{id}")
     public ResponseEntity<?> editResult(@RequestBody Result newResult, @PathVariable Long id) {
 
-        return resultRepository.findById(id)
-                .map(result -> {
-                    result.setRace(raceRepository.findById(newResult.getRace().getId()).orElse(null));
-                    result.setDriver(driverRepository.findById(newResult.getDriver().getId()).orElse(null));
-                    result.setPositionStart(newResult.getPositionStart());
-                    result.setPositionFinal(newResult.getPositionFinal());
-                    result.setFastestLapTime(newResult.getFastestLapTime());
-                    result.setFastestLap(newResult.getFastestLap());
-                    result.setMilisTime(newResult.getMilisTime());
-                    result.setFastestTimeSpeed(newResult.getFastestTimeSpeed());
-                    result.setPoints(newResult.getPoints());
-                    resultRepository.save(result);
-                    return ResponseEntity.ok("");
-                })
-                .orElseGet(() -> {
-                    newResult.setId(id);
-                    resultRepository.save(newResult);
-                    return ResponseEntity.ok("");
-                });
+        return resultService.getStringResponseEntity(newResult, id);
 
     }
+    
 
     @ApiOperation(value = "Method for getting all results by driver id")
     @GetMapping(value = "/results/{id}")
@@ -132,18 +95,7 @@ public class ResultController {
     @GetMapping(value = "/result/sum/{id}")
     public List<DriverCumulativeSumPoints> getCumulativePointsByDriverId(@PathVariable Long id) {
 
-        List<Tuple> cumPoints = resultRepository.getCumulativePointsByDriverId(id);
-
-        List<DriverCumulativeSumPoints> cumPointsDto = cumPoints.stream()
-                .map(t -> new DriverCumulativeSumPoints(
-                        t.get(0, Integer.class),
-                        t.get(1, Integer.class),
-                        t.get(2, Double.class),
-                        t.get(3, Double.class)
-                ))
-                .collect(Collectors.toList());
-
-        return cumPointsDto;
+        return resultService.getDriverCumulativeSumPoints(id);
 
     }
 

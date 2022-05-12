@@ -3,6 +3,7 @@ package cz.upce.inpia.f1app.controller;
 import cz.upce.inpia.f1app.entity.Driver;
 import cz.upce.inpia.f1app.entity.Race;
 import cz.upce.inpia.f1app.repository.RaceRepository;
+import cz.upce.inpia.f1app.services.RaceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class RaceController {
 
     @Autowired
     private RaceRepository raceRepository;
+
+    private RaceService raceService;
 
     @ApiOperation(value = "Method getting all races")
     @GetMapping(value = "/races")
@@ -58,19 +61,7 @@ public class RaceController {
     @PutMapping(value = "/race/{id}")
     public ResponseEntity<?> editRace(@RequestBody Race newRace, @PathVariable Long id) {
 
-        return raceRepository.findById(id)
-                .map(race -> {
-                    race.setRound(newRace.getRound());
-                    race.setYear(newRace.getYear());
-                    race.setCircuit(newRace.getCircuit());
-                    raceRepository.save(race);
-                    return ResponseEntity.ok("");
-                })
-                .orElseGet(() -> {
-                    newRace.setId(id);
-                    raceRepository.save(newRace);
-                    return ResponseEntity.ok("");
-                });
+        return raceService.getStringResponseEntity(newRace, id);
     }
 
 
