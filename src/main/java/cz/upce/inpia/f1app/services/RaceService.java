@@ -4,7 +4,9 @@ import cz.upce.inpia.f1app.entity.Race;
 import cz.upce.inpia.f1app.repository.RaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RaceService {
 
     @Autowired

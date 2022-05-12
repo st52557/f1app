@@ -9,7 +9,9 @@ import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DriverService {
 
     @Autowired

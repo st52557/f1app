@@ -28,12 +28,13 @@ public class ResultController {
 
     @Autowired
     private ResultRepository resultRepository;
-    @Autowired
-    private DriverRepository driverRepository;
-    @Autowired
-    private RaceRepository raceRepository;
 
-    private ResultService resultService;
+
+    private final ResultService resultService;
+
+    public ResultController(ResultService resultService) {
+        this.resultService = resultService;
+    }
 
     @ApiOperation(value = "Method for getting all results")
     @GetMapping(value = "/results")

@@ -1,5 +1,7 @@
 package cz.upce.inpia.f1app.services;
 
+import org.springframework.stereotype.Service;
+
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
+@Service
 public class EmailService {
 
     public static void sendMail(String emailTo, String code) throws AddressException, MessagingException, IOException {

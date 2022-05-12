@@ -8,6 +8,7 @@ import cz.upce.inpia.f1app.entity.Driver;
 import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
 import cz.upce.inpia.f1app.services.DriverService;
+import cz.upce.inpia.f1app.services.ResultService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 
 @RestController(value = "/driver")
 @Api(tags = "drivers")
@@ -29,7 +29,11 @@ public class DriverController {
     @Autowired
     private DriverRepository driverRepository;
 
-    private DriverService driverService;
+    private final DriverService driverService;
+
+    public DriverController(DriverService driverService) {
+        this.driverService = driverService;
+    }
 
     @ApiOperation(value = "Method for getting all drivers")
     @GetMapping(value = "/drivers")

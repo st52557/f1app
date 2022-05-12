@@ -14,14 +14,14 @@ public class NewResultDTO {
     private Long driverId;
     private Long raceId;
 
-    private int positionFinal;
-    private int positionOrder;
-    private int positionStart;
-    private Double points;
-    private int laps;
-    private int milisTime;
-    private int fastestLap;
-    private int fastestLapTime;
-    private Double fastestTimeSpeed;
+    private int positionFinal = 0;
+    private int positionOrder = 0;
+    private int positionStart = 0;
+    private Double points = 0.0;
+    private int laps = 0;
+    private int milisTime = 0;
+    private int fastestLap = 0;
+    private int fastestLapTime = 0;
+    private Double fastestTimeSpeed = 0.0;
 
 }

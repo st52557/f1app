@@ -10,11 +10,13 @@ import cz.upce.inpia.f1app.repository.RaceRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ResultService {
 
     @Autowired
@@ -51,6 +53,8 @@ public class ResultService {
 
         Race race = raceRepository.findRaceById(newResultDTO.getRaceId());
         Driver driver = driverRepository.findDriverById(newResultDTO.getDriverId());
+
+        System.out.print(resultToSave);
 
         resultToSave.setRace(race);
         resultToSave.setDriver(driver);
