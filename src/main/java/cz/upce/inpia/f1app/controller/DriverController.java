@@ -66,7 +66,7 @@ public class DriverController {
     @ApiOperation(value = "Method for deleting driver")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping(value = "/driver/{id}")
-    public ResponseEntity<?> DeleteDriver(@PathVariable Long id) {
+    public ResponseEntity<?> deleteDriver(@PathVariable Long id) {
 
         driverRepository.deleteById(id);
         return ResponseEntity.ok("");

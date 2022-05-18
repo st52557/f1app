@@ -26,14 +26,13 @@ import java.util.List;
 @CrossOrigin
 public class ResultController {
 
-    @Autowired
-    private ResultRepository resultRepository;
-
+    private final ResultRepository resultRepository;
 
     private final ResultService resultService;
 
-    public ResultController(ResultService resultService) {
+    public ResultController(ResultService resultService, ResultRepository resultRepository) {
         this.resultService = resultService;
+        this.resultRepository = resultRepository;
     }
 
     @ApiOperation(value = "Method for getting all results")
@@ -44,8 +43,7 @@ public class ResultController {
             return resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.ASC, "points"));
         }
 
-        Page<Result> pageableResult = resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.valueOf(sort), "points"));
-        return pageableResult;
+        return resultRepository.findAll(PageRequest.of(page, size, Sort.Direction.valueOf(sort), "points"));
     }
 
 

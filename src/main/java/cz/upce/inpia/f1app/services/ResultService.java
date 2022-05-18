@@ -54,7 +54,6 @@ public class ResultService {
         Race race = raceRepository.findRaceById(newResultDTO.getRaceId());
         Driver driver = driverRepository.findDriverById(newResultDTO.getDriverId());
 
-        System.out.print(resultToSave);
 
         resultToSave.setRace(race);
         resultToSave.setDriver(driver);

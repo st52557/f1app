@@ -14,11 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class DriverService {
 
-    @Autowired
-    private DriverRepository driverRepository;
+    private final DriverRepository driverRepository;
 
-    @Autowired
-    private ResultRepository resultRepository;
+    private final ResultRepository resultRepository;
+
+    public DriverService(DriverRepository driverRepository, ResultRepository resultRepository) {
+        this.driverRepository = driverRepository;
+        this.resultRepository = resultRepository;
+    }
 
     public ResponseEntity<String> getStringResponseEntity(Driver newDriver, Long id) {
         return driverRepository.findById(id)
