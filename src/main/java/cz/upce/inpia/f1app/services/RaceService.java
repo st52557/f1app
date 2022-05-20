@@ -1,31 +1,58 @@
 package cz.upce.inpia.f1app.services;
 
+import cz.upce.inpia.f1app.dto.NewRaceDTO;
 import cz.upce.inpia.f1app.entity.Race;
 import cz.upce.inpia.f1app.repository.RaceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RaceService {
 
-    @Autowired
-    private RaceRepository raceRepository;
+    private final RaceRepository raceRepository;
 
-    public ResponseEntity<String> getStringResponseEntity(Race newRace, Long id) {
+    public RaceService(RaceRepository raceRepository) {
+        this.raceRepository = raceRepository;
+    }
+
+
+    public List<Race> getRaces() {
+        return raceRepository.findAll();
+    }
+
+    public Race getRaceById(Long id) {
         return raceRepository.findById(id)
-                .map(race -> {
-                    race.setRound(newRace.getRound());
-                    race.setYear(newRace.getYear());
-                    race.setCircuit(newRace.getCircuit());
-                    raceRepository.save(race);
-                    return ResponseEntity.ok("");
-                })
-                .orElseGet(() -> {
-                    newRace.setId(id);
-                    raceRepository.save(newRace);
-                    return ResponseEntity.ok("");
-                });
+                .orElseThrow(() -> new RuntimeException("Could not find race with id " + id));
+    }
+
+    public ResponseEntity<Race> saveNewRace(NewRaceDTO newRace) {
+
+        Race race = new Race();
+
+        race.setRound(newRace.getRound());
+        race.setYear(newRace.getYear());
+        race.setCircuit(newRace.getCircuit());
+
+        return ResponseEntity.ok(raceRepository.save(race));
+    }
+
+    public ResponseEntity<Race> deleteRaceById(Long id) {
+        Race race = raceRepository.getById(id);
+        raceRepository.deleteById(id);
+        return ResponseEntity.ok(race);
+    }
+
+    public ResponseEntity<Race> editRaceService(NewRaceDTO newRace, Long id) {
+
+        Race race = raceRepository.findRaceById(id);
+        race.setRound(newRace.getRound());
+        race.setYear(newRace.getYear());
+        race.setCircuit(newRace.getCircuit());
+
+        return ResponseEntity.ok(raceRepository.save(race));
+
     }
 
 }

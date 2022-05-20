@@ -49,7 +49,7 @@ public class JwtTokenUtil implements Serializable {
 		return expiration.before(new Date());
 	}
 
-	private Boolean ignoreTokenExpiration(String token) {
+	private Boolean ignoreTokenExpiration() {
 		return false;
 	}
 
@@ -65,7 +65,7 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	public Boolean canTokenBeRefreshed(String token) {
-		return (!isTokenExpired(token) || ignoreTokenExpiration(token));
+		return (!isTokenExpired(token) || ignoreTokenExpiration());
 	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {

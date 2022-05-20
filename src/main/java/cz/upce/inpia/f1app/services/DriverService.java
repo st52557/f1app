@@ -1,21 +1,23 @@
 package cz.upce.inpia.f1app.services;
 
 import cz.upce.inpia.f1app.dto.CompareDriversDTO;
+import cz.upce.inpia.f1app.dto.NewDriverDTO;
 import cz.upce.inpia.f1app.dto.inner.Overtakes;
 import cz.upce.inpia.f1app.dto.inner.PointsScored;
 import cz.upce.inpia.f1app.dto.inner.RacesWon;
 import cz.upce.inpia.f1app.entity.Driver;
 import cz.upce.inpia.f1app.repository.DriverRepository;
 import cz.upce.inpia.f1app.repository.ResultRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DriverService {
 
     private final DriverRepository driverRepository;
-
     private final ResultRepository resultRepository;
 
     public DriverService(DriverRepository driverRepository, ResultRepository resultRepository) {
@@ -23,30 +25,63 @@ public class DriverService {
         this.resultRepository = resultRepository;
     }
 
-    public ResponseEntity<String> getStringResponseEntity(Driver newDriver, Long id) {
+    public List<Driver> getDrivers(String sort) {
+        if (!sort.equals("ASC") && !sort.equals("DESC")) {
+            return driverRepository.findAll();
+        }
+        return driverRepository.findAll(Sort.by(Sort.Direction.valueOf(sort), "name"));
+    }
+
+    public Driver getDriverById(Long id) {
         return driverRepository.findById(id)
-                .map(driver -> {
-                    driver.setName(newDriver.getName());
-                    driver.setCode(newDriver.getCode());
-                    driverRepository.save(driver);
-                    return ResponseEntity.ok("");
-                })
-                .orElseGet(() -> {
-                    newDriver.setId(id);
-                    driverRepository.save(newDriver);
-                    return ResponseEntity.ok("");
-                });
+                .orElseThrow(() -> new RuntimeException("Could not find a driver with id " + id));
+    }
+
+    public ResponseEntity<Driver> saveNewDriver(NewDriverDTO newDriver) {
+
+        Driver driver = new Driver();
+
+        driver.setBorn(newDriver.getBorn());
+        driver.setCode(newDriver.getCode());
+        driver.setSurename(newDriver.getSurename());
+        driver.setName(newDriver.getName());
+        driver.setNationalilty(newDriver.getNationalilty());
+        driver.setRef_name(newDriver.getRef_name());
+
+        return ResponseEntity.ok(driverRepository.save(driver));
+    }
+
+    public ResponseEntity<Driver> deleteDriverById(Long id) {
+        Driver driver = driverRepository.findDriverById(id);
+        driverRepository.deleteById(id);
+        return ResponseEntity.ok(driver);
+    }
+
+    public ResponseEntity<Driver> editDriverService(NewDriverDTO newDriver, Long id) {
+
+        Driver driver = driverRepository.findDriverById(id);
+        driver.setCode(newDriver.getCode());
+        driver.setName(newDriver.getName());
+        driver.setSurename(newDriver.getSurename());
+        driver.setBorn(newDriver.getBorn());
+        driver.setNationalilty(newDriver.getNationalilty());
+        driver.setRef_name(newDriver.getRef_name());
+
+        return ResponseEntity.ok(driverRepository.save(driver));
+
     }
 
 
-    public CompareDriversDTO getCompareDriversDTO(Long firstDriverId, Long secondDriverId) {
+    public CompareDriversDTO getCompareDrivers(Long firstDriverId, Long secondDriverId) {
         CompareDriversDTO compareDriversDTO = new CompareDriversDTO();
 
         compareDriversDTO.setSecondDriverId(secondDriverId);
         compareDriversDTO.setFirstDriverId(firstDriverId);
 
-        Driver firstDriver = driverRepository.findById(firstDriverId).orElse(null);
-        Driver secondDriver = driverRepository.findById(secondDriverId).orElse(null);
+        Driver firstDriver = driverRepository.findById(firstDriverId)
+                .orElseThrow(() -> new RuntimeException("Could not find driver with id " + firstDriverId));
+        Driver secondDriver = driverRepository.findById(secondDriverId)
+                .orElseThrow(() -> new RuntimeException("Could not find driver with id " + secondDriverId));
 
         if (firstDriver == null || secondDriver == null) {
             throw new NullPointerException("Driver to compare not found");

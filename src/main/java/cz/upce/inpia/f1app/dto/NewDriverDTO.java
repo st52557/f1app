@@ -14,6 +14,7 @@ public class NewDriverDTO {
     private String surename;
     private String code;
     private String nationalilty;
+    private String ref_name;
     private int born;
 
 }

@@ -1,6 +1,6 @@
 package cz.upce.inpia.f1app.repository;
 
-import cz.upce.inpia.f1app.dto.DriverCumulativeSumPoints;
+
 import cz.upce.inpia.f1app.entity.Result;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,6 +15,8 @@ public interface ResultRepository extends JpaRepository<Result, Long>, JpaSpecif
     public List<Result> findAllResultsByDriverCode(String code);
 
     public List<Result> findAllByDriverId(Long id);
+
+    public Result findResultById(Long id);
 
     @Query("SELECT SUM(re.points) FROM Result re WHERE re.driver.id = ?1")
     public Double countAllPointsByDriverId(Long id);
